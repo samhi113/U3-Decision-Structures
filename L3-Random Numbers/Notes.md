@@ -6,7 +6,7 @@
 
 _How do I make random numbers?_  There's a class for that!
 
-Then `Random` class of the `java.utils` package includes many methods to assist in creating random numbers. Random numbers are an excellent way to simulate many game-like objects. For example, a die is just a random number from 1 to 6. 
+Then `Random` class of the `java.util` package includes many methods to assist in creating random numbers. Random numbers are an excellent way to simulate many game-like objects. For example, a die is just a random number from 1 to 6. 
 
 The one method we will primarily be working with is: 
 
