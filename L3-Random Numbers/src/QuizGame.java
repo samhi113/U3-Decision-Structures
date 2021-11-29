@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 public class QuizGame {
 
@@ -6,7 +8,8 @@ public class QuizGame {
     static String displayProblem = "";
     static JPanel panel;
     static JButton newProblemButton, checkAnswerButton;
-    static JLabel showProblem;
+    static JLabel showProblem, showResults;
+    static JTextField answerInput;
     static JRadioButton addition, subtraction, multiplication, division;
 
     public static void main(String[] args) {
@@ -32,29 +35,94 @@ public class QuizGame {
         multiplication = new JRadioButton("Multiplication");
         division = new JRadioButton("Division");
 
-        addition.setBounds(100, 10, 150, 50);
-        subtraction.setBounds(100, 40, 150, 50);
-        multiplication.setBounds(100, 70, 150, 50);
-        division.setBounds(100, 100, 150, 50);
+        newProblemButton = new JButton("New Problem");
+        showProblem = new JLabel("");
+        checkAnswerButton = new JButton("Check Answer");
+        showResults = new JLabel("");
+
+        answerInput = new JTextField(10);
+
+        ButtonGroup radios = new ButtonGroup();
+
+        addition.setBounds(100, 10, 150, 25);
+        subtraction.setBounds(100, 40, 150, 25);
+        multiplication.setBounds(100, 70, 150, 25);
+        division.setBounds(100, 100, 150, 25);
+        newProblemButton.setBounds(75, 130, 150, 25);
+        showProblem.setBounds(75, 160, 150, 25);
+        answerInput.setBounds(75, 190, 150, 25);
+        checkAnswerButton.setBounds(75, 220, 150, 25);
+        showResults.setBounds(75, 250, 150, 25);
+
+        newProblemButton.addActionListener(new problemChoiceListener());
+        checkAnswerButton.addActionListener(new checkAnswerListener());
+
+        addition.setSelected(true);
+        subtraction.setSelected(false);
+        multiplication.setSelected(false);
+        division.setSelected(false);
+
+        radios.add(addition);
+        radios.add(subtraction);
+        radios.add(multiplication);
+        radios.add(division);
 
         panel.add(addition);
         panel.add(subtraction);
         panel.add(multiplication);
         panel.add(division);
 
+        panel.add(newProblemButton);
+        panel.add(showProblem);
+        panel.add(answerInput);
+        panel.add(checkAnswerButton);
+        panel.add(showResults);
+
         frame.add(panel);
         panel.setLayout(null);
         frame.setVisible(true);
     }
 
+    private class problemChoiceListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (addition.isSelected()){
+                addProblem();
+            }
+
+            if (subtraction.isSelected()){
+                subProblem();
+            }
+
+            if (multiplication.isSelected()){
+                mulProblem();
+            }
+
+            if (division.isSelected()){
+                divProblem();
+            }
+            showProblem.setText(displayProblem);
+            panel.remove(newProblemButton);
+            panel.updateUI();
+        }
+    }
+
+    private class checkAnswerListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            getUserAnswer();
+            checkAnswer();
+        }
+    }
+
     public static void checkAnswer(){
         if (usersAnswer == correctAnswer){
-            displayProblem = "You are correct!";
+            showResults.setText("You are correct!");
+            panel.add(newProblemButton);
+            panel.updateUI();
         } else {
-            displayProblem = "Incorrect. Better luck next time.";
+            showResults.setText("Incorrect. Try again!");
         }
-        JOptionPane.showMessageDialog(null, displayProblem);
-        System.out.println(correctAnswer);
     }
 
     public static void getUserAnswer(){
@@ -106,7 +174,7 @@ public class QuizGame {
     }
 
     public static double input(String message){
-        return Double.parseDouble(JOptionPane.showInputDialog(message));
+        return Double.parseDouble(answerInput.getText());
     }
 
     public static void createProblem(){
